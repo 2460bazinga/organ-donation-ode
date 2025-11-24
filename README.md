@@ -27,41 +27,76 @@
 
 ## Overview
 
-This repository contains the code, documentation, and analysis for empirically validating the **Organ Donation Equilibrium (ODE) model**—a novel theoretical framework that reframes the organ shortage as a **coordination failure** occurring at the **sorting stage** of the donation process, rather than at the traditionally emphasized authorization (family consent) stage.
+This repository contains the code, documentation, and analysis for empirically testing the **Organ Donation Equilibrium (ODE) model**—a game-theoretic framework that reframes the organ shortage as a **multi-stakeholder coordination failure** at the **sorting stage** of the donation process, rather than at the traditionally emphasized authorization (family consent) stage.
 
-The persistent shortage of transplantable organs in the United States results in thousands of preventable deaths annually. While conventional wisdom attributes this shortage primarily to family refusal to authorize donation, the ODE model argues that the dominant source of loss occurs much earlier: when Organ Procurement Organizations (OPOs) must decide which hospital referrals warrant the costly investment of engagement and monitoring necessary to eventually approach families.
+The persistent shortage of transplantable organs in the United States results in thousands of preventable deaths annually. While conventional wisdom attributes this shortage primarily to family refusal to authorize donation, the ODE model argues that the dominant source of loss occurs much earlier: viable donors **fall through the cracks** due to coordination failures between hospitals, Organ Procurement Organizations (OPOs), and transplant centers. These losses stem not from conscious rejection of suitable donors, but from **lack of infrastructure, capacity, education, insight, and monitoring** across a fragmented system of non-cooperative players.
 
-This research uses granular, referral-level data from the **ORCHID dataset** (133,101 deceased donor referrals, 2015-2021, 6 OPOs) to test the ODE model's predictions through a corrected **Loss Waterfall Decomposition** methodology.
+This research uses granular, referral-level data from the **ORCHID dataset** (133,101 deceased donor referrals, 2015-2021, 6 OPOs) to test a key empirical implication of the ODE model: that sorting losses dominate authorization losses. While the full theoretical model involves multi-player game dynamics, the ORCHID data allows us to measure the **magnitude** of sorting loss, providing partial validation of the coordination failure hypothesis.
 
 ---
 
 ## The ODE Model
 
-### Core Thesis
+### Core Thesis: A Multi-Stakeholder Game
 
-The ODE model posits that the organ shortage is fundamentally a **market design failure** characterized by:
+The ODE model posits that the organ shortage is fundamentally a **coordination failure in a non-cooperative game** involving multiple stakeholders:
 
-1. **Information Asymmetry**: OPOs cannot predict which organs transplant centers will accept
-2. **Misaligned Incentives**: OPO performance metrics reward risk-averse behavior
-3. **Coordination Failure**: Lack of reliable demand signals leads to systematic under-investment in marginal donors
+**Key Players**:
+- **Hospitals**: Identify potential donors, make referrals to OPOs
+- **OPOs**: Evaluate referrals, engage with families, procure organs
+- **Transplant Centers**: Accept or reject procured organs for transplantation
+- **Families**: Authorize or decline donation
 
-### The Sorting Problem
+**The Coordination Problem**:
+1. **Information Asymmetry**: Each player has incomplete information about others' actions and preferences
+2. **Misaligned Incentives**: Players optimize their own metrics, not system-wide outcomes
+3. **Strategic Complementarity**: Each player's optimal action depends on what they expect others to do
+4. **Lack of Infrastructure**: No reliable mechanism for coordinating expectations across players
 
-The critical insight is that "sorting" is not a binary decision ("approach or not?"), but a **continuous, resource-intensive process** involving:
+**Result**: Viable donors fall through the cracks not because any single player makes the wrong decision, but because the **absence of coordination infrastructure** prevents efficient matching.
 
-- **Initial Clinical Evaluation**: Preliminary screening of referral characteristics
-- **Engagement and Monitoring**: Days of active monitoring, family support, and logistical coordination
-- **Cultivation**: Maintaining the option of donation as the patient's condition evolves
+### The Sorting Problem: Falling Through the Cracks
 
-OPOs face a decision under uncertainty: *Is this referral worth the high cost of engagement, given the low probability of successful placement?*
+The critical insight is that sorting losses occur not from **conscious rejection** of viable donors, but from **systemic gaps** in a fragmented process:
 
-### The Low-Level Equilibrium
+**Why Donors Fall Through the Cracks**:
+- **Hospital lacks capacity** to properly identify and refer all potential donors
+- **OPO lacks real-time information** about transplant center demand
+- **Transplant center lacks visibility** into the donor pipeline
+- **No coordinated monitoring** across the multi-day cultivation process
+- **Education gaps** prevent stakeholders from recognizing marginal-but-viable candidates
+- **Infrastructure limitations** (staffing, technology, communication systems)
 
-Faced with uncertainty about transplant center acceptance, risk-averse OPOs rationally focus on "perfect" donors (young, healthy, trauma victims) and under-invest in marginal-but-viable candidates. This becomes self-fulfilling:
+Sorting is not a single decision but a **multi-stage, multi-actor process** requiring:
+- Hospital identification and timely referral
+- OPO clinical evaluation and family engagement
+- Continuous monitoring as patient condition evolves
+- Coordination with transplant centers on potential acceptance
+- Logistical preparation for procurement
 
-> **OPOs don't procure marginal organs** → **Transplant centers don't prepare for them** → **OPOs' beliefs are confirmed** → **Equilibrium persists**
+**The Coordination Failure**: Each stakeholder, acting independently without reliable information about others' actions, rationally under-invests in marginal cases. The result is a low-level equilibrium where viable donors are lost not through active rejection, but through **passive attrition**.
 
-The result: thousands of medically suitable organs are lost before the donation conversation ever begins.
+### The Low-Level Equilibrium: Strategic Complementarity
+
+The system settles into a **stable but inefficient equilibrium** due to strategic complementarity between players:
+
+**The Vicious Cycle**:
+1. **Hospitals** don't invest in donor identification training → fewer marginal referrals
+2. **OPOs** don't see demand signals from transplant centers → don't cultivate marginal referrals
+3. **Transplant centers** don't see marginal organs in the pipeline → don't prepare for them
+4. **Lack of marginal organs** → transplant centers' conservative expectations confirmed
+5. **Cycle repeats** → equilibrium persists
+
+**Why It's Stable**:
+- No single player can profitably deviate unilaterally
+- Hospitals investing in referrals without OPO follow-through see no benefit
+- OPOs cultivating marginal donors without transplant center acceptance waste resources
+- Transplant centers preparing for marginal organs that never arrive lose efficiency
+
+**Why It's Inefficient**:
+- A **coordinated** increase in effort across all players would be Pareto-improving
+- Thousands of medically suitable organs are lost not through active rejection, but through **passive attrition**
+- The system operates far below its biological capacity
 
 ---
 
@@ -359,6 +394,58 @@ Best OPO              ~33,000   ~76%
 ```
 
 Results are robust across all three approaches, confirming that sorting loss dominates regardless of MSC definition.
+
+---
+
+## Limitations and Future Work
+
+### Scope of Empirical Validation
+
+This analysis provides **partial validation** of the ODE model's predictions:
+
+**What ORCHID Data Can Tell Us**:
+- ✅ **Magnitude** of sorting loss (how many donors are lost before approach)
+- ✅ **Variance** in OPO performance (evidence of different equilibria)
+- ✅ **Characteristics** of lost donors (age, cause of death patterns)
+- ✅ **Relative importance** of sorting vs. authorization vs. placement losses
+
+**What ORCHID Data Cannot Tell Us**:
+- ❌ **Which coordination failure** caused each loss (hospital? OPO? transplant center?)
+- ❌ **Why** specific referrals were not approached (capacity? information? expectations?)
+- ❌ **Transplant center behavior** (acceptance criteria, real-time demand)
+- ❌ **Hospital behavior** (referral practices, identification quality)
+- ❌ **Communication patterns** between stakeholders
+
+### The Missing Mechanisms
+
+The full ODE model is a **multi-player game** with strategic complementarity. ORCHID only captures **OPO-level outcomes**, not the underlying game dynamics. We can measure that donors fall through the cracks, but not precisely why:
+
+- Did the **hospital** fail to identify the referral as viable?
+- Did the **OPO** lack capacity to monitor this case?
+- Did the **transplant center** signal unwillingness to accept marginal organs?
+- Did **infrastructure gaps** (IT systems, communication protocols) prevent coordination?
+- Did **education deficits** lead to misclassification of viability?
+
+### Future Research Directions
+
+To fully validate the game-theoretic framework, we need:
+
+1. **Multi-stakeholder data**: Link OPO data with hospital referral practices and transplant center acceptance decisions
+2. **Process data**: Track communication, monitoring intensity, and resource allocation across the cultivation period
+3. **Experimental interventions**: Test coordination mechanisms (e.g., real-time demand signaling platforms)
+4. **Structural estimation**: Estimate players' belief functions and reaction functions to identify equilibrium selection
+5. **Counterfactual policy analysis**: Simulate impact of coordination infrastructure improvements
+
+### What This Analysis Achieves
+
+Despite these limitations, this analysis provides crucial evidence:
+
+1. **Establishes the magnitude** of the problem (sorting loss is dominant)
+2. **Refutes the authorization bottleneck narrative** (family refusal is not the primary constraint)
+3. **Documents systematic patterns** consistent with coordination failure (OPO variance, age bias)
+4. **Provides a baseline** for measuring impact of future interventions
+
+The finding that 75-85% of losses occur at sorting is **necessary but not sufficient** to prove the full ODE model. It is, however, **inconsistent** with the conventional authorization-bottleneck view and **consistent** with the coordination failure hypothesis.
 
 ---
 
