@@ -488,7 +488,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contact
 
 **Author**: Noah  
-**Email**: [Your email]  
+**Email**: noah@2460.life 
 **GitHub**: [@2460bazinga](https://github.com/2460bazinga)
 
 For questions about the ODE model or this analysis, please open an issue or contact the author directly.
