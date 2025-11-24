@@ -1,0 +1,19 @@
+# Core Data Science Libraries
+pandas>=1.5.0
+numpy>=1.23.0
+scipy>=1.9.0
+
+# Machine Learning & Statistics
+scikit-learn>=1.1.0
+
+# Visualization
+matplotlib>=3.6.0
+seaborn>=0.12.0
+plotly>=5.10.0
+
+# Utilities
+tqdm>=4.64.0
+python-dateutil>=2.8.0
+
+# Optional: For advanced visualizations
+# pysankey>=1.0.0  # Sankey diagrams (uncomment if needed)
