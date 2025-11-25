@@ -45,7 +45,7 @@ from sklearn.inspection import permutation_importance
 # Paths
 DATA_DIR = Path.home() / 'physionet.org' / 'files' / 'orchid' / '2.1.1'
 INPUT_FILE = DATA_DIR / 'orchid_with_msc_sensitivity.csv'
-OUTPUT_DIR = Path(__file__).parent.parent / 'results'
+OUTPUT_DIR = Path.home() / 'results'
 FIGURES_DIR = OUTPUT_DIR / 'figures'
 FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -82,7 +82,13 @@ def experiment_1_sorting_predictors():
     mscs['is_business_hours'] = mscs['hour'].between(8, 17).astype(int)
     
     # Patient features
-    mscs['bmi'] = mscs['weight_kg'] / ((mscs['height_in'] * 0.0254) ** 2)
+    # Calculate BMI, handling missing/zero height
+    height_m = mscs['height_in'] * 0.0254
+    mscs['bmi'] = np.where(
+        (mscs['weight_kg'] > 0) & (height_m > 0),
+        mscs['weight_kg'] / (height_m ** 2),
+        np.nan
+    )
     mscs['is_elderly'] = (mscs['age'] >= 60).astype(int)
     mscs['is_pediatric'] = (mscs['age'] < 18).astype(int)
     
@@ -107,7 +113,21 @@ def experiment_1_sorting_predictors():
     ]
     
     # Prepare data
-    X = mscs[feature_cols].fillna(mscs[feature_cols].median())
+    X = mscs[feature_cols].copy()
+    
+    # Replace infinity with NaN
+    X = X.replace([np.inf, -np.inf], np.nan)
+    
+    # Fill NaN with median
+    X = X.fillna(X.median())
+    
+    # Clip extreme values (beyond 99.9th percentile)
+    for col in X.columns:
+        if X[col].dtype in ['float64', 'int64']:
+            upper = X[col].quantile(0.999)
+            lower = X[col].quantile(0.001)
+            X[col] = X[col].clip(lower, upper)
+    
     y = mscs['approached'].astype(int)
     
     print(f"\nFeatures: {len(feature_cols)}")
@@ -263,15 +283,41 @@ def experiment_2_clustering(X, feature_cols):
     
     # Load data
     df = pd.read_csv(INPUT_FILE)
-    mscs = df[df['is_msc_percentile_99'] == True].copy()
+    mscs_full = df[df['is_msc_percentile_99'] == True].copy()
+    
+    # Sample for clustering (standard practice for large datasets)
+    print(f"\nTotal MSCs: {len(mscs_full):,}")
+    sample_size = min(10000, len(mscs_full))
+    mscs = mscs_full.sample(n=sample_size, random_state=42)
+    print(f"Using sample of {len(mscs):,} for clustering (faster computation)")
     
     # Use same features as Experiment 1
     mscs['time_referred'] = pd.to_datetime(mscs['time_referred'], errors='coerce')
     mscs['hour'] = mscs['time_referred'].dt.hour
     mscs['day_of_week'] = mscs['time_referred'].dt.dayofweek
-    mscs['bmi'] = mscs['weight_kg'] / ((mscs['height_in'] * 0.0254) ** 2)
     
-    X_cluster = mscs[['age', 'bmi', 'brain_death', 'hour', 'day_of_week']].fillna(mscs[['age', 'bmi', 'brain_death', 'hour', 'day_of_week']].median())
+    # Calculate BMI safely
+    height_m = mscs['height_in'] * 0.0254
+    mscs['bmi'] = np.where(
+        (mscs['weight_kg'] > 0) & (height_m > 0),
+        mscs['weight_kg'] / (height_m ** 2),
+        np.nan
+    )
+    
+    X_cluster = mscs[['age', 'bmi', 'brain_death', 'hour', 'day_of_week']].copy()
+    
+    # Replace infinity with NaN
+    X_cluster = X_cluster.replace([np.inf, -np.inf], np.nan)
+    
+    # Fill NaN with median
+    X_cluster = X_cluster.fillna(X_cluster.median())
+    
+    # Clip extreme values
+    for col in X_cluster.columns:
+        if X_cluster[col].dtype in ['float64', 'int64']:
+            upper = X_cluster[col].quantile(0.999)
+            lower = X_cluster[col].quantile(0.001)
+            X_cluster[col] = X_cluster[col].clip(lower, upper)
     
     # Scale
     scaler = StandardScaler()
@@ -289,12 +335,15 @@ def experiment_2_clustering(X, feature_cols):
     silhouettes = []
     
     for k in range(2, 11):
-        kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)
+        print(f"  Testing k={k}...", end=' ', flush=True)
+        kmeans = KMeans(n_clusters=k, random_state=42, n_init=5, max_iter=100)
         kmeans.fit(X_scaled)
         inertias.append(kmeans.inertia_)
         
         from sklearn.metrics import silhouette_score
-        silhouettes.append(silhouette_score(X_scaled, kmeans.labels_))
+        sil_score = silhouette_score(X_scaled, kmeans.labels_)
+        silhouettes.append(sil_score)
+        print(f"done (silhouette={sil_score:.3f})")
     
     # Elbow plot
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
@@ -317,8 +366,10 @@ def experiment_2_clustering(X, feature_cols):
     
     # Use optimal k (let's say 4 based on typical patterns)
     optimal_k = 4
-    kmeans = KMeans(n_clusters=optimal_k, random_state=42, n_init=10)
+    print(f"\nFitting final model with k={optimal_k}...")
+    kmeans = KMeans(n_clusters=optimal_k, random_state=42, n_init=10, max_iter=100)
     clusters = kmeans.fit_predict(X_scaled)
+    print("Done!")
     
     mscs['cluster'] = clusters
     
