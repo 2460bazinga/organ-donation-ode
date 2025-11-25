@@ -6,7 +6,7 @@
 
 **The Organ Donation Equilibrium (ODE): A Coordination Failure Framework for the Organ Shortage**
 
-*Theoretical framework and empirical validation using the ORCHID dataset*
+*Empirical validation using the ORCHID dataset*
 
 ---
 
@@ -29,11 +29,7 @@
 
 ## Overview
 
-This repository contains the theoretical framework, analysis code, and empirical validation of the **Organ Donation Equilibrium (ODE) model**—a game-theoretic framework that reframes the organ shortage as a **multi-stakeholder coordination failure** at the **sorting stage** of the donation process, rather than at the traditionally emphasized authorization (family consent) stage.
-
-**Author**: Noah (Family Coordinator)  
-**Data Source**: ORCHID dataset (created by H. Adam et al., Yale University)  
-**Purpose**: Develop and test a unifying theoretical framework for understanding organ donation inefficiency
+This repository contains analysis code and empirical validation of the **Organ Donation Equilibrium (ODE) model**—a recently developed game-theoretic framework that reframes the organ shortage as a **multi-stakeholder coordination failure** at the **sorting stage** of the donation process, rather than at the traditionally emphasized authorization (family consent) stage.
 
 The persistent shortage of transplantable organs in the United States results in thousands of preventable deaths annually. While conventional wisdom attributes this shortage primarily to family refusal to authorize donation, the ODE model argues that the dominant source of loss occurs much earlier: viable donors **fall through the cracks** due to coordination failures between hospitals, Organ Procurement Organizations (OPOs), and transplant centers. These losses stem not from conscious rejection of suitable donors, but from **lack of infrastructure, capacity, education, insight, and monitoring** across a fragmented system of non-cooperative players.
 
@@ -506,22 +502,19 @@ See [`RESULTS.md`](RESULTS.md) for complete analysis and interpretation.
 
 ## Citation
 
-If you use this theoretical framework, code, or methodology in your research, please cite:
+If you use this code or methodology in your research, please cite:
 
-**ODE Model**:
 ```bibtex
 @misc{organ-donation-ode-2024,
-  author = {Noah},
-  title = {The Organ Donation Equilibrium: A Coordination Failure Framework for the Organ Shortage},
+  title = {Empirical Validation of the Organ Donation Equilibrium Model},
   year = {2024},
   publisher = {GitHub},
   journal = {GitHub repository},
-  howpublished = {\url{https://github.com/2460bazinga/organ-donation-ode}},
-  note = {Theoretical framework and empirical validation using ORCHID dataset}
+  howpublished = {\url{https://github.com/2460bazinga/organ-donation-ode}}
 }
 ```
 
-**ORCHID Dataset** (created by H. Adam et al.):
+**ORCHID Dataset**:
 ```bibtex
 @article{adam2025orchid,
   title={Organ Retrieval and Collection of Health Information for Donation (ORCHID)},
