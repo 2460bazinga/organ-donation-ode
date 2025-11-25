@@ -121,6 +121,11 @@ def merge_with_referrals(calc):
     if 'time_referred' in referrals.columns:
         referrals['time_referred'] = pd.to_datetime(referrals['time_referred'], errors='coerce')
         referrals['year'] = referrals['time_referred'].dt.year
+        
+        # De-obfuscate years (PhysioNet offset by +13 years for privacy)
+        # CalcDeaths uses real years (2015-2020), referrals use obfuscated years (2028-2033)
+        referrals['year_actual'] = referrals['year'] - 13
+        print(f"\nDe-obfuscating years: {referrals['year'].min():.0f}-{referrals['year'].max():.0f} → {referrals['year_actual'].min():.0f}-{referrals['year_actual'].max():.0f}")
     
     # Aggregate referrals by OPO-year
     print("\nAggregating referrals by OPO-year...")
@@ -138,7 +143,8 @@ def merge_with_referrals(calc):
     if 'transplanted' in referrals.columns:
         agg_dict['transplanted'] = 'sum'
     
-    ref_by_opo_year = referrals.groupby(['opo', 'year']).agg(agg_dict).reset_index()
+    ref_by_opo_year = referrals.groupby(['opo', 'year_actual']).agg(agg_dict).reset_index()
+    ref_by_opo_year.rename(columns={'year_actual': 'year'}, inplace=True)
     ref_by_opo_year.rename(columns={'patient_id': 'referrals'}, inplace=True)
     
     print(f"Created {len(ref_by_opo_year)} OPO-year observations")
@@ -262,13 +268,25 @@ def analyze_temporal_trends(merged):
         print("\nDonation rate not available. Skipping temporal analysis.")
         return
     
+    # Determine which CALC column to use
+    if 'calc_deaths' in merged.columns:
+        calc_col = 'calc_deaths'
+    elif 'CALC_deaths' in merged.columns:
+        calc_col = 'CALC_deaths'
+    else:
+        print("\nERROR: No CALC deaths column found!")
+        return
+    
     print("\nDonation Rate by Year (all OPOs combined):")
     print("-" * 60)
     
-    yearly = merged.groupby('year').agg({
-        'calc_deaths': 'sum',
-        'referrals': 'sum',
-        'transplanted': 'sum'
+    # Filter for years with CALC deaths data
+    merged_with_calc = merged.dropna(subset=[calc_col])
+    
+    yearly = merged_with_calc.groupby("year").agg({
+        "calc_deaths": "sum",
+        "referrals": "sum",
+        "transplanted": "sum"
     })
     
     yearly['donation_rate'] = (yearly['transplanted'] / yearly['calc_deaths']) * 1000
