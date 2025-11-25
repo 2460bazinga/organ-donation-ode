@@ -367,34 +367,31 @@ Outputs:
 
 **Status**: Analysis completed November 2024. Full results in [`RESULTS.md`](RESULTS.md).
 
-### 1. **Sorting Loss Dominates** (78.4%)
+### 1. **Timing is the Primary Bottleneck for DCD**
 
-Using the counterfactual value decomposition method:
+- **5.3x Difference**: DCD donors with longer windows (>48hr) are 5.3x more likely to be approached than those with short windows (<12hr).
+- **3.4x Longer Windows**: Approached DCD cases have 3.4x longer windows than not-approached cases (57.7hr vs 16.8hr).
+- **Structural Asymmetry**: DBD allows reactive approach (71.5% approached after brain death), while DCD requires proactive coordination.
+- **50% of DCD Have Short Windows**: Half of all DCD referrals have windows too short (<24 hours) for successful coordination.
 
-```
-Loss Decomposition:
-├─ Sorting Loss:        78.4%  ← DOMINANT (MSCs never approached)
-├─ Authorization Loss:  13.8%  (Family declined)
-└─ Placement Loss:       7.8%  (Organ not transplanted)
-```
+**Conclusion**: The DCD-DBD approach rate gap (10% vs 94%) is primarily explained by structural timing differences, not organizational behavior. This is a systems design problem, not an organizational performance problem.
 
-**Interpretation**: The authorization bottleneck narrative is **empirically refuted**. Family refusal accounts for only 13.8% of recoverable losses. The dominant source of loss (78.4%) occurs upstream, before families are ever approached.
+For a complete summary, see [TIME_WINDOW_ANALYSIS.md](docs/TIME_WINDOW_ANALYSIS.md).
 
----
+### 2. **Cause of Death >> Age**
 
-### 2. **The Mechanism: Infrastructure Constraints** (The Weekend Effect)
+- **3.6x More Important**: Cause of death is 3.6x more important than age in predicting sorting success.
+- **Mechanism-Based Screening**: OPOs use mechanism-based screening (trauma vs. stroke), not just demographics.
 
-We tested two competing hypotheses:
-- **Hypothesis A**: Rational risk aversion (OPOs consciously reject marginal donors)
-- **Hypothesis B**: Infrastructure constraints (OPOs lack capacity to process all referrals)
+### 3. **DCD Pathway Discrimination**
 
-**Result**: Strong evidence for **Hypothesis B**.
+- **85-90% Under-utilization**: Even young DCD donors (age 22) are only approached 16% of the time.
 
-**The Weekend Effect**:
-- **Sundays** (lowest referral volume): **Highest sorting efficiency**
-- **Wednesdays** (highest referral volume): **Lowest sorting efficiency**
+### 4. **Downstream Failures**
 
-**Interpretation**: When referral volume is high, sorting efficiency collapses. Viable donors "fall through the cracks" due to **congestion externalities**, not conscious rejection. The system lacks the infrastructure (staffing, monitoring, technology) to properly evaluate all cases during high-volume periods.
+- **13% of Authorizations Fail**: 2,402 families authorized donation but organs were not procured.
+
+For a complete summary of ML findings, see [ML_FINDINGS.md](docs/ML_FINDINGS.md).
 
 ---
 
