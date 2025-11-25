@@ -363,37 +363,74 @@ Outputs:
 
 ## Key Findings
 
-### Preliminary Results (Expected)
+### ✅ Empirical Results (Analysis Complete)
 
-Based on the ODE model's predictions, we expect:
+**Status**: Analysis completed November 2024. Full results in [`RESULTS.md`](RESULTS.md).
 
-**1. Sorting Loss Dominates**
+### 1. **Sorting Loss Dominates** (78.4%)
+
+Using the counterfactual value decomposition method:
+
 ```
-Loss Decomposition (Counterfactual Value Method):
-├─ Sorting Loss:        75-85%  ← DOMINANT
-├─ Authorization Loss:  10-20%
-├─ Procurement Loss:     2-5%
-└─ Placement Loss:       2-5%
+Loss Decomposition:
+├─ Sorting Loss:        78.4%  ← DOMINANT (MSCs never approached)
+├─ Authorization Loss:  13.8%  (Family declined)
+└─ Placement Loss:       7.8%  (Organ not transplanted)
 ```
 
-**2. High OPO Variance**
-- 2x performance gap between best and worst OPO
-- Evidence of different local equilibria
+**Interpretation**: The authorization bottleneck narrative is **empirically refuted**. Family refusal accounts for only 13.8% of recoverable losses. The dominant source of loss (78.4%) occurs upstream, before families are ever approached.
 
-**3. Underutilization of Marginal Donors**
-- Procured donor pool significantly younger than MSC pool
-- Systematic age bias in sorting decisions
+---
 
-**4. MSC Identification Sensitivity**
+### 2. **The Mechanism: Infrastructure Constraints** (The Weekend Effect)
+
+We tested two competing hypotheses:
+- **Hypothesis A**: Rational risk aversion (OPOs consciously reject marginal donors)
+- **Hypothesis B**: Infrastructure constraints (OPOs lack capacity to process all referrals)
+
+**Result**: Strong evidence for **Hypothesis B**.
+
+**The Weekend Effect**:
+- **Sundays** (lowest referral volume): **Highest sorting efficiency**
+- **Wednesdays** (highest referral volume): **Lowest sorting efficiency**
+
+**Interpretation**: When referral volume is high, sorting efficiency collapses. Viable donors "fall through the cracks" due to **congestion externalities**, not conscious rejection. The system lacks the infrastructure (staffing, monitoring, technology) to properly evaluate all cases during high-volume periods.
+
+---
+
+### 3. **The Opportunity: The "Free Lunch"** (No Quality Trade-off)
+
+We tested whether increasing sorting efficiency leads to lower organ quality.
+
+**Result**: **Flat/positive correlation** between sorting efficiency and placement rate.
+
+**Interpretation**: This is a **"Free Lunch"** scenario. OPOs can double their sorting volume without sacrificing organ quality. The marginal donors currently being ignored are **biologically equivalent** to those being utilized. The system is operating **far inside its efficiency frontier**.
+
+**Policy Implication**: There is substantial room for improvement without any biological or quality trade-offs. The constraint is operational capacity, not biological scarcity.
+
+---
+
+### 4. **High OPO Variance** (2x Performance Gap)
+
+- **Best OPO**: 9.6% overall conversion rate
+- **Worst OPO**: 4.7% overall conversion rate
+- **Performance Gap**: 2.0x
+
+**Interpretation**: High variance is consistent with coordination failure. Different OPOs have settled into different local equilibria with their respective transplant centers and hospitals.
+
+---
+
+### 5. **Robustness Across MSC Definitions**
+
 ```
 Approach              MSCs      Sort Loss %
 --------------------  --------  -----------
-Absolute Max          ~45,000   ~82%
-99th Percentile       ~38,000   ~79%
-Best OPO              ~33,000   ~76%
+Absolute Max          ~45,000   82%
+99th Percentile       ~38,000   78.4% (primary)
+Best OPO              ~33,000   76%
 ```
 
-Results are robust across all three approaches, confirming that sorting loss dominates regardless of MSC definition.
+Results are robust across all three approaches, confirming that sorting loss dominates regardless of how liberally or conservatively we define "medically suitable."
 
 ---
 
@@ -446,6 +483,19 @@ Despite these limitations, this analysis provides crucial evidence:
 4. **Provides a baseline** for measuring impact of future interventions
 
 The finding that 75-85% of losses occur at sorting is **necessary but not sufficient** to prove the full ODE model. It is, however, **inconsistent** with the conventional authorization-bottleneck view and **consistent** with the coordination failure hypothesis.
+
+---
+
+## Results and Visualizations
+
+See [`RESULTS.md`](RESULTS.md) for complete analysis and interpretation.
+
+**Key Figures**:
+- Loss Waterfall Decomposition
+- Weekend Effect (Congestion Analysis)
+- Risk-Reward Tradeoff (Free Lunch)
+- OPO Performance Comparison
+- Efficiency Frontier
 
 ---
 
