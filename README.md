@@ -376,6 +376,8 @@ Outputs:
 
 **Conclusion**: The DCD-DBD approach rate gap (10% vs 94%) is primarily explained by structural timing differences, not organizational behavior. This is a systems design problem, not an organizational performance problem.
 
+**Connection to ODE Model**: This finding validates the coordination failure hypothesis. The ODE model predicts that OPOs rationally under-invest in the costly process of "engagement and monitoring" when they cannot reliably coordinate with transplant centers. For DCD, this coordination must happen within a narrow time window. When that window is short (<24 hours), the multi-stakeholder coordination (hospital notification → OPO response → transplant center interest → family approach) cannot succeed. The result is exactly what the ODE model predicts: viable donors are lost through **passive attrition** when coordination infrastructure is insufficient for the temporal demands of the process.
+
 For a complete summary, see [TIME_WINDOW_ANALYSIS.md](docs/TIME_WINDOW_ANALYSIS.md).
 
 ### 2. **Cause of Death >> Age**
