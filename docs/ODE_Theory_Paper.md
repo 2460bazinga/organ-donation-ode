@@ -1,6 +1,7 @@
-# The Sorting Problem: A Coordination Failure Framework for the Organ Shortage
+# The Organ Donation Equilibrium: A Coordination Failure Framework for the Organ Shortage
 
-**Author:** Noah  
+**Author:** Noah (Family Coordinator)  
+**Data Source:** ORCHID dataset (Adam, H. et al., Yale University)  
 **Date:** November 24, 2024
 
 ---
