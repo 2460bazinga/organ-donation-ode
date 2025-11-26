@@ -387,6 +387,10 @@ If you use this code or findings in your research, please cite:
 
 ---
 
+## [The Organ Donation Equilibrium: An Empirical Analysis of Coordination Failure in the U.S. Organ Donation System](https://docs.google.com/document/d/e/2PACX-1vT1S6-WC8bcc7NtshKQDq13OLPGPEkcNXSUuNoeCoPJgs6vWj-7BwtBVDNMHa6Hqc8tovDUqNNtnpC4/pub)
+
+
+
 ## Acknowledgments
 
 The author acknowledges the use of large language models (Manus 1.5, Gemini 2.5 Flash, and Claude Opus 4.5) for assistance with literature review, data analysis, and computational implementation. All AI-generated content was reviewed, verified, and edited by the author. The author takes full responsibility for the accuracy and integrity of the work.
