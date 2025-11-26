@@ -1,227 +1,271 @@
-# Organ Donation Equilibrium (ODE) Model: Empirical Validation
+# Organ Donation Equilibrium (ODE): An Empirical Analysis of Coordination Failure
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Status: Research](https://img.shields.io/badge/status-research-orange.svg)]()
+[![DOI](https://img.shields.io/badge/DOI-10.13026%2Feytj--4f29-blue)](https://doi.org/10.13026/eytj-4f29)
 
-**The Organ Donation Equilibrium (ODE): A Coordination Failure Framework for the Organ Shortage**
+**A game-theoretic framework revealing that the organ shortage is primarily a coordination failure, not a scarcity problem.**
 
-*Empirical validation using the ORCHID dataset*
+*By Noah Parrish*
+
+---
+
+## Abstract
+
+This paper introduces the **Organ Donation Equilibrium (ODE)**, a game-theoretic framework that reframes the U.S. organ shortage as a multi-stakeholder coordination failure rather than a problem of biological scarcity or family refusal. Using the ORCHID dataset (133,101 deceased donor referrals, 2015-2021), we apply Shapley value decomposition to attribute welfare loss across three stages: sorting (OPO identification and monitoring), authorization (family consent), and procurement (surgical recovery). 
+
+**Key findings:**
+- **Sorting accounts for 58.6%** of welfare loss (Shapley decomposition)
+- **67.8% of medically suitable referrals** are never approached for authorization
+- **Age bias dominates**: 60-year-olds are 91% less likely to be approached than newborns
+- **Procurement is efficient**: 79.3% success rate, accounting for only 13.7% of welfare loss
+- **Investment misalignment**: $307M invested 2015-2021, with 95.8% targeting procurement (13.7% of problem) vs. 4.2% targeting sorting (58.6% of problem)
+
+The organ shortage is not primarily a problem of inadequate technology, family refusal, or biological scarcity. It is a coordination failure in a fragmented system where viable donors fall through the cracks before families are ever approached.
 
 ---
 
 ## Table of Contents
 
-- [Overview](#overview)
+- [The Problem](#the-problem)
 - [The ODE Model](#the-ode-model)
-- [Research Questions](#research-questions)
+- [Key Findings](#key-findings)
 - [Dataset](#dataset)
 - [Methodology](#methodology)
 - [Repository Structure](#repository-structure)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Key Findings](#key-findings)
 - [Citation](#citation)
+- [Acknowledgments](#acknowledgments)
 - [License](#license)
-- [Contact](#contact)
 
 ---
 
-## Overview
+## The Problem
 
-This repository contains analysis code and empirical validation of the **Organ Donation Equilibrium (ODE) model**—a recently developed game-theoretic framework that reframes the organ shortage as a **multi-stakeholder coordination failure** at the **sorting stage** of the donation process, rather than at the traditionally emphasized authorization (family consent) stage.
+Over 100,000 Americans wait for organ transplants. Thousands die waiting each year. The conventional narrative attributes this shortage to:
+1. **Biological scarcity** - not enough suitable donors
+2. **Family refusal** - families declining to authorize donation
+3. **Technical limitations** - organs damaged during procurement or preservation
 
-The persistent shortage of transplantable organs in the United States results in thousands of preventable deaths annually. While conventional wisdom attributes this shortage primarily to family refusal to authorize donation, the ODE model argues that the dominant source of loss occurs much earlier: viable donors **fall through the cracks** due to coordination failures between hospitals, Organ Procurement Organizations (OPOs), and transplant centers. These losses stem not from conscious rejection of suitable donors, but from **lack of infrastructure, capacity, education, insight, and monitoring** across a fragmented system of non-cooperative players.
+This paper demonstrates that all three narratives are largely incorrect.
 
-This research uses granular, referral-level data from the **ORCHID dataset** (133,101 deceased donor referrals, 2015-2021, 6 OPOs) to test a key empirical implication of the ODE model: that sorting losses dominate authorization losses. While the full theoretical model involves multi-player game dynamics, the ORCHID data allows us to measure the **magnitude** of sorting loss, providing partial validation of the coordination failure hypothesis.
+### The Real Problem: Coordination Failure
+
+The organ donation system is a twelve-player dynamic game involving hospitals, organ procurement organizations (OPOs), transplant centers, and families. Each player operates under uncertainty, time constraints, and incomplete information about others' actions. The result is a **low-level equilibrium** where:
+
+- Hospitals under-refer marginal cases
+- OPOs under-monitor marginal referrals
+- Transplant centers under-prepare for marginal organs
+- Families are never asked (because donors exit the system upstream)
+
+No single player is failing. The system is failing to coordinate.
 
 ---
 
 ## The ODE Model
 
-### Core Thesis: A Multi-Stakeholder Game
+The **Organ Donation Equilibrium** is a game-theoretic framework that models organ donation as a three-stage sequential process:
 
-The ODE model posits that the organ shortage is fundamentally a **coordination failure in a non-cooperative game** involving multiple stakeholders:
+### Stage 1: Sorting
+**Players:** Hospitals, OPOs  
+**Action:** Identify, refer, and monitor potential donors  
+**Outcome:** 32.2% of medically suitable referrals are approached; 67.8% exit the system
 
-**Key Players**:
-- **Hospitals**: Identify potential donors, make referrals to OPOs
-- **OPOs**: Evaluate referrals, engage with families, procure organs
-- **Transplant Centers**: Accept or reject procured organs for transplantation
-- **Families**: Authorize or decline donation
+### Stage 2: Authorization
+**Players:** OPOs, Families  
+**Action:** Request and obtain family consent  
+**Outcome:** 61.3% of approached families authorize donation
 
-**The Coordination Problem**:
-1. **Information Asymmetry**: Each player has incomplete information about others' actions and preferences
-2. **Misaligned Incentives**: Players optimize their own metrics, not system-wide outcomes
-3. **Strategic Complementarity**: Each player's optimal action depends on what they expect others to do
-4. **Lack of Infrastructure**: No reliable mechanism for coordinating expectations across players
+### Stage 3: Procurement
+**Players:** OPOs, Surgeons  
+**Action:** Surgically recover organs  
+**Outcome:** 79.3% of authorized donors yield procured organs
 
-**Result**: Viable donors fall through the cracks not because any single player makes the wrong decision, but because the **absence of coordination infrastructure** prevents efficient matching.
+### The Coordination Failure
 
-### The Sorting Problem: Falling Through the Cracks
+The model predicts that **sorting losses dominate** because:
+1. **Information asymmetry**: OPOs lack real-time visibility into donor evolution
+2. **Capacity constraints**: OPOs cannot monitor all marginal referrals
+3. **Strategic complementarity**: Each player's optimal effort depends on others' actions
+4. **Lack of infrastructure**: No coordinated monitoring or decision support systems
 
-The critical insight is that sorting losses occur not from **conscious rejection** of viable donors, but from **systemic gaps** in a fragmented process:
-
-**Why Donors Fall Through the Cracks**:
-- **Hospital lacks capacity** to properly identify and refer all potential donors
-- **OPO lacks real-time information** about transplant center demand
-- **Transplant center lacks visibility** into the donor pipeline
-- **No coordinated monitoring** across the multi-day cultivation process
-- **Education gaps** prevent stakeholders from recognizing marginal-but-viable candidates
-- **Infrastructure limitations** (staffing, technology, communication systems)
-
-Sorting is not a single decision but a **multi-stage, multi-actor process** requiring:
-- Hospital identification and timely referral
-- OPO clinical evaluation and family engagement
-- Continuous monitoring as patient condition evolves
-- Coordination with transplant centers on potential acceptance
-- Logistical preparation for procurement
-
-**The Coordination Failure**: Each stakeholder, acting independently without reliable information about others' actions, rationally under-invests in marginal cases. The result is a low-level equilibrium where viable donors are lost not through active rejection, but through **passive attrition**.
-
-### The Low-Level Equilibrium: Strategic Complementarity
-
-The system settles into a **stable but inefficient equilibrium** due to strategic complementarity between players:
-
-**The Vicious Cycle**:
-1. **Hospitals** don't invest in donor identification training → fewer marginal referrals
-2. **OPOs** don't see demand signals from transplant centers → don't cultivate marginal referrals
-3. **Transplant centers** don't see marginal organs in the pipeline → don't prepare for them
-4. **Lack of marginal organs** → transplant centers' conservative expectations confirmed
-5. **Cycle repeats** → equilibrium persists
-
-**Why It's Stable**:
-- No single player can profitably deviate unilaterally
-- Hospitals investing in referrals without OPO follow-through see no benefit
-- OPOs cultivating marginal donors without transplant center acceptance waste resources
-- Transplant centers preparing for marginal organs that never arrive lose efficiency
-
-**Why It's Inefficient**:
-- A **coordinated** increase in effort across all players would be Pareto-improving
-- Thousands of medically suitable organs are lost not through active rejection, but through **passive attrition**
-- The system operates far below its biological capacity
+The system settles into a stable but inefficient equilibrium where viable donors are lost not through active rejection, but through **passive attrition**.
 
 ---
 
-## Research Questions
+## Key Findings
 
-This project addresses four primary research questions:
+### 1. Sorting Dominates Welfare Loss
 
-1. **What proportion of organ loss occurs at the sorting stage?**
-   - Hypothesis: >70% of losses occur before families are approached
+**Shapley Value Decomposition:**
+- **Sorting: 58.6%** of welfare loss (29,983 lost donors)
+- **Authorization: 27.7%** (14,173 lost donors)
+- **Procurement: 13.7%** (7,010 lost donors)
 
-2. **How much variance exists in OPO sorting efficiency?**
-   - Hypothesis: High variance indicates coordination failure (different local equilibria)
+**Proportional Attribution:**
+- **Sorting: 80.4%** (41,117 lost donors)
+- Authorization: 14.8% (7,562 lost donors)
+- Procurement: 4.9% (2,487 lost donors)
 
-3. **Are OPOs systematically under-utilizing marginal donors?**
-   - Hypothesis: Procured donor pool is narrower than the full pool of Medically Suitable Candidates
+### 2. Medical Suitability Is Not the Constraint
 
-4. **Does the Loss Waterfall decomposition validate the ODE model?**
-   - Hypothesis: Sorting loss dominates authorization and placement losses
+Of 133,101 total referrals:
+- **60,668 were medically suitable** (age < 70, BMI 15-45, known cause of death)
+- Only **19,551 were approached** (32.2% approach rate)
+- **41,117 suitable referrals** were never approached (67.8%)
+
+**Conclusion:** The bottleneck is not biological scarcity—it's the failure to identify and pursue suitable donors.
+
+### 3. Age Bias Is the Dominant Factor
+
+**Multivariate regression (controlling for all factors):**
+- Age coefficient: -0.0424 (p < 0.0001)
+- **Odds Ratio: 0.96 per year** (each additional year reduces odds of approach by 4%)
+- A 60-year-old has 0.96^60 = **0.09× the odds** of a newborn (91% less likely to be approached)
+
+**Age effect by decade:**
+- 0-17 years: 40.0% approach rate
+- 18-39 years: 24.5% approach rate
+- 40-59 years: 13.8% approach rate
+- 60-79 years: 6.2% approach rate
+- 80-89 years: 0.9% approach rate
+
+**Disparity: 42.2× between youngest and oldest groups**
+
+### 4. OPO Performance Varies Substantially
+
+**Approach rates across 6 OPOs:**
+- Best OPO: 21.2%
+- Worst OPO: 9.3%
+- **Variance: 2.28×**
+
+**Interpretation:** Organizational capacity and practices matter. The 2.28× variance suggests that some OPOs have developed coordination capabilities that others lack.
+
+### 5. Procurement Is Not the Bottleneck
+
+**Procurement success rate: 79.3%**
+- Of 11,989 authorized donors, 9,502 were successfully procured
+- Only 2,487 losses at procurement (4.9% of total loss)
+
+**Implication:** High-tech interventions (normothermic perfusion, organ preservation devices, surgical innovations) address less than 5% of the problem.
+
+### 6. Investment Is Severely Misaligned
+
+**Total private investment (2015-2021): $307M**
+
+**By stage:**
+- **Procurement: $294M (95.8%)** → addresses 13.7% of welfare loss
+- **Sorting: $13M (4.2%)** → addresses 58.6% of welfare loss
+- **Authorization: $0M (0.0%)** → addresses 27.7% of welfare loss
+
+**Misalignment ratio: 7.0×** overinvestment in procurement relative to its welfare impact
+
+**Major investments:**
+- TransMedics (Organ Care System): $150M
+- OrganOx (liver perfusion): $12M (later acquired for $1.5B in 2025)
+- Paragonix (organ transport): $5M
+- Other organ preservation startups: $80M
+- NIH grants (procurement-focused): ~$32M/year
+- NIH grants (coordination/sorting): ~$8M/year
 
 ---
 
 ## Dataset
 
-### ORCHID v2.1.1
+### ORCHID v1.0.0
 
-**Source**: [PhysioNet](https://physionet.org/content/orchid/2.1.1/)
+**Source:** [PhysioNet](https://doi.org/10.13026/eytj-4f29)
 
-**Description**: The Organ Retrieval and Collection of Health Information for Donation (ORCHID) dataset is a multi-center, de-identified dataset containing granular information on deceased donor referrals across six U.S. Organ Procurement Organizations.
+**Citation:** Adam, H., Suriyakumar, V., Pollard, T., Moody, B., Erickson, J., Segal, G., ... & Ghassemi, M. (2023). Organ Retrieval and Collection of Health Information for Donation (ORCHID) (version 1.0.0). *PhysioNet*.
 
-**Coverage**:
+**Description:** The ORCHID dataset is a multi-center, de-identified dataset containing granular information on deceased donor referrals across six U.S. Organ Procurement Organizations.
+
+**Coverage:**
 - **133,101 referral records** (2015-2021)
 - **6 OPOs** across 13 states
-- **8,972 organ donations**
-- **8 organ types** tracked
+- **9,502 procured donors**
+- **Longitudinal clinical data** (labs, vitals, serology)
 
-**Key Variables**:
-- Demographics: age, gender, race, height, weight
-- Clinical: brain_death status, cause_of_death, comorbidities
-- Process: approached, authorized, procured, transplanted (binary indicators)
-- Outcomes: organ-specific procurement and transplant outcomes
+**Key Variables:**
+- Demographics: age, gender, race, height, weight, BMI
+- Clinical: brain_death status, cause_of_death, comorbidities, laboratory values
+- Process: approached (binary), authorized (binary), procured (binary)
+- Temporal: referral_date, approach_date, authorization_date, procurement_date
 
-**Important Note**: ORCHID "referrals" are **mechanically ventilated patients** referred by hospitals to OPOs, not all deaths. This is a pre-screened population.
+**Data Access:**
 
-### Data Access
-
-The ORCHID dataset requires credentialed access through PhysioNet. To replicate this analysis:
-
-1. Complete PhysioNet credentialing: [https://physionet.org/login/](https://physionet.org/login/)
-2. Sign the data use agreement for ORCHID v2.1.1
+The ORCHID dataset requires credentialed access through PhysioNet:
+1. Complete PhysioNet credentialing: https://physionet.org/login/
+2. Sign the data use agreement for ORCHID v1.0.0
 3. Download the dataset to `data/orchid/`
 
-**Note**: Raw data is not included in this repository due to PhysioNet's data use agreement.
+**Note:** Raw data is not included in this repository due to PhysioNet's data use agreement.
 
 ---
 
 ## Methodology
 
-### The Challenge: Avoiding Survivor Bias
+### Shapley Value Decomposition
 
-A naive approach to identifying "Medically Suitable Candidates" (MSCs) would learn from successfully transplanted cases. This creates a **tautology**: if OPOs systematically reject 70-year-old donors due to risk aversion, the model learns "70-year-olds aren't viable," thereby codifying the inefficiency we're trying to measure.
+We apply **Shapley value decomposition** to attribute welfare loss across the three stages. The Shapley value is a game-theoretic solution concept that allocates total value (or loss) to players based on their marginal contributions across all possible orderings.
 
-### Our Solution: Hybrid Clinical-Empirical Approach
+**Formula:**
 
-We implement a **three-layer methodology** to identify MSCs:
+For each stage $s \in \{\text{sorting}, \text{authorization}, \text{procurement}\}$:
 
-#### **Layer 1: Absolute Contraindications** (Clinical Guidelines)
-Hard rules from OPTN/UNOS policies that are time-invariant:
-- Active malignancy
-- HIV+ (with temporal adjustment for HOPE Act, 2015)
-- Rabies, Creutzfeldt-Jakob disease
-- Active sepsis, untreated tuberculosis
-
-#### **Layer 2: Donation Type Pathways** (DBD vs DCD)
-Separate criteria based on donation mechanism:
-
-| Organ     | DBD Max Age | DCD Max Age |
-|-----------|-------------|-------------|
-| Liver     | 100         | 70          |
-| Kidney    | 90          | 75          |
-| Heart     | 70          | 55          |
-| Lung      | 75          | 60          |
-| Pancreas  | 60          | 50          |
-| Intestine | 65          | 55          |
-
-**Key Insight**: Liver has no effective age ceiling for DBD (even 90-year-olds can donate), but DCD has ceiling ~70 due to warm ischemia sensitivity.
-
-#### **Layer 3: Empirical Ranges** (Sensitivity Analysis)
-
-We implement **three approaches** to test robustness:
-
-**Approach A: Absolute Maximum** (Most Liberal)
-- Logic: "If it has been done successfully once, it is an MSC"
-- Method: Use maximum observed age from successful cases
-- Interpretation: Upper bound on sorting loss
-
-**Approach B: 99th Percentile** (Moderate - PRIMARY)
-- Logic: "If top 1% can do it, it's viable"
-- Method: 99th percentile of successful cases
-- Interpretation: Best practice standard
-
-**Approach C: Best-Performing OPO** (Benchmark)
-- Logic: "If the best OPO can do it, others should too"
-- Method: Highest-converting OPO's 95th percentile
-- Interpretation: Achievable standard in practice
-
-### Loss Waterfall Decomposition (Counterfactual Value Method)
-
-Traditional loss decomposition simply counts losses at each stage. We implement a **counterfactual value method** that asks: *How many transplants would we have gained if we fixed this stage?*
-
-**Formula**:
-
-For each stage $s \in \{\text{sorting, authorization, procurement, placement}\}$:
-
-$$\text{Counterfactual Loss}_s = N_{\text{lost at } s} \times P(\text{success} \mid \text{pass stage } s)$$
+$$\phi_s = \sum_{S \subseteq N \setminus \{s\}} \frac{|S|! \cdot (|N| - |S| - 1)!}{|N|!} \cdot [v(S \cup \{s\}) - v(S)]$$
 
 Where:
-- $N_{\text{lost at } s}$ = Number of candidates lost at stage $s$
-- $P(\text{success} \mid \text{pass stage } s)$ = Downstream success rate conditional on passing stage $s$
+- $N$ = set of all stages
+- $S$ = subset of stages
+- $v(S)$ = value function (total procured donors when stages in $S$ succeed)
+- $\phi_s$ = Shapley value for stage $s$
 
-**Example**: If 10,000 MSCs are not approached, and the success rate for approached MSCs is 8%, then:
-- **Sorting Loss** = 10,000 × 0.08 = 800 counterfactual transplants
+**Interpretation:** The Shapley value accounts for **interactive effects** between stages. It answers: "How much does each stage contribute to total welfare loss, accounting for dependencies?"
 
-This method correctly attributes value to each stage based on its position in the sequential process.
+### Medical Suitability Criteria
+
+We define **medically suitable referrals** using conservative, time-invariant criteria to avoid survivor bias:
+
+**Inclusion criteria:**
+- Age < 70 years
+- BMI 15-45 kg/m²
+- Known cause of death (not "Unknown")
+- No absolute contraindications (active malignancy, HIV+, rabies, CJD)
+
+**Rationale:** These criteria are deliberately conservative. Many donors outside these ranges are successfully transplanted, but using broader criteria would risk codifying existing inefficiencies.
+
+### Multiple Imputation
+
+We use **multiple imputation** (MICE algorithm) to handle missing data:
+- 100% sample retention (no case deletion)
+- 10 imputed datasets
+- Pooled estimates using Rubin's rules
+
+**Missing data rates:**
+- Age: 0.2%
+- BMI: 3.1%
+- Cause of death: 8.4%
+- Race: 12.7%
+
+### Multivariate Regression
+
+We estimate a logistic regression model to control for confounding:
+
+**Model:**
+```
+Pr(approached = 1) = logit^{-1}(β₀ + β₁·age + β₂·BMI + β₃·race + β₄·gender + β₅·OPO + β₆·year + ε)
+```
+
+**Controls:**
+- Demographics: age, BMI, race, gender
+- Temporal: year fixed effects (2015-2021)
+- Organizational: OPO fixed effects (6 OPOs)
+
+**Sample:** 133,101 referrals  
+**Pseudo R²:** 0.1177  
+**Convergence:** Successful
 
 ---
 
@@ -232,42 +276,22 @@ organ-donation-ode/
 ├── README.md                          # This file
 ├── LICENSE                            # MIT License
 ├── requirements.txt                   # Python dependencies
-├── .gitignore                         # Git ignore rules
-│
-├── scripts/                           # Analysis scripts
-│   ├── 01_data_validation.py         # Pre-check dataset completeness
-│   ├── 02_data_exploration.py        # Exploratory data analysis
-│   ├── 03_msc_sensitivity.py         # MSC identification (3 approaches)
-│   ├── 04_loss_waterfall.py          # Loss Waterfall decomposition
-│   ├── 05_robustness_analysis.py     # Bootstrap, stratification, CV
-│   ├── 06_shapley_decomposition.py   # Shapley value analysis
-│   └── 07_visualization.py           # Generate all figures
-│
-├── docs/                              # Documentation
-│   ├── ODE_Theory_Paper.md           # Full theoretical paper
-│   ├── METHODOLOGY.md                # Detailed methodology
-│   ├── HANDOFF_DOCUMENT.md           # Comprehensive project context
-│   ├── QUICK_REFERENCE.md            # Quick start guide
-│   └── DATA_DICTIONARY.md            # ORCHID variable definitions
-│
 ├── data/                              # Data directory (not tracked)
-│   ├── orchid/                       # ORCHID dataset (user must download)
-│   │   └── OPOReferrals.csv
-│   └── processed/                    # Processed datasets
-│       ├── orchid_with_msc.csv
-│       └── loss_waterfall_results.json
-│
-├── results/                           # Analysis results
-│   ├── msc_sensitivity_results.json
-│   ├── opo_comparison.csv
-│   ├── robustness_analysis.json
-│   └── shapley_decomposition.json
-│
-└── figures/                           # Generated visualizations
-    ├── sankey_diagram.png
-    ├── opo_comparison.png
-    ├── loss_decomposition.png
-    └── temporal_trends.png
+│   └── orchid/                        # ORCHID dataset (user must download)
+├── scripts/                           # Analysis scripts
+│   ├── 01_data_validation.py          # Data cleaning and validation
+│   ├── 02_shapley_decomposition.py    # Shapley value computation
+│   ├── 03_multivariate_regression.py  # Logistic regression analysis
+│   ├── 04_opo_performance.py          # OPO variance analysis
+│   ├── 05_age_effect.py               # Age bias analysis
+│   └── 06_investment_analysis.py      # Investment misalignment analysis
+├── results/                           # Output directory
+│   ├── shapley_values.csv             # Shapley decomposition results
+│   ├── regression_results.csv         # Multivariate regression output
+│   └── figures/                       # Visualizations
+└── docs/                              # Documentation
+    ├── methodology.md                 # Detailed methodology
+    └── data_dictionary.md             # ORCHID variable descriptions
 ```
 
 ---
@@ -276,254 +300,98 @@ organ-donation-ode/
 
 ### Prerequisites
 
-- Python 3.8 or higher
-- pip package manager
-- Git
+- Python 3.8+
+- PhysioNet credentialed access to ORCHID dataset
 
 ### Setup
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/2460bazinga/organ-donation-ode.git
-   cd organ-donation-ode
-   ```
+1. **Clone the repository:**
+```bash
+git clone https://github.com/2460bazinga/organ-donation-ode.git
+cd organ-donation-ode
+```
 
-2. **Create a virtual environment** (recommended):
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+2. **Install dependencies:**
+```bash
+pip install -r requirements.txt
+```
 
-3. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Download ORCHID dataset**:
-   - Complete PhysioNet credentialing
-   - Download ORCHID v2.1.1
-   - Place `OPOReferrals.csv` in `data/orchid/`
+3. **Download ORCHID dataset:**
+   - Obtain credentialed access from PhysioNet
+   - Download ORCHID v1.0.0
+   - Place files in `data/orchid/`
 
 ---
 
 ## Usage
 
-### Quick Start
-
-Run the complete analysis pipeline:
+### Run Complete Analysis
 
 ```bash
-# 1. Validate dataset
+# 1. Validate and clean data
 python scripts/01_data_validation.py
 
-# 2. Explore data structure
-python scripts/02_data_exploration.py
+# 2. Compute Shapley values
+python scripts/02_shapley_decomposition.py
 
-# 3. Identify MSCs (sensitivity analysis)
-python scripts/03_msc_sensitivity.py
+# 3. Run multivariate regression
+python scripts/03_multivariate_regression.py
 
-# 4. Calculate Loss Waterfall
-python scripts/04_loss_waterfall.py
+# 4. Analyze OPO performance
+python scripts/04_opo_performance.py
 
-# 5. Robustness analysis
-python scripts/05_robustness_analysis.py
+# 5. Analyze age effects
+python scripts/05_age_effect.py
 
-# 6. Shapley decomposition
-python scripts/06_shapley_decomposition.py
-
-# 7. Generate visualizations
-python scripts/07_visualization.py
+# 6. Analyze investment misalignment
+python scripts/06_investment_analysis.py
 ```
 
-### Individual Scripts
+### Generate Figures
 
-**Data Validation**:
+All figures from the paper can be reproduced:
+
 ```bash
-python scripts/01_data_validation.py
-```
-Outputs: Console report + `data/processed/validation_results.json`
-
-**MSC Sensitivity Analysis**:
-```bash
-python scripts/03_msc_sensitivity.py
-```
-Outputs: 
-- `results/msc_sensitivity_results.json`
-- `data/processed/orchid_with_msc_sensitivity.csv`
-
-**Loss Waterfall**:
-```bash
-python scripts/04_loss_waterfall.py --approach percentile_99
-```
-Options: `absolute_max`, `percentile_99`, `best_opo`
-
-Outputs:
-- `results/loss_waterfall_results.json`
-- `results/opo_comparison.csv`
-
----
-
-## Key Findings
-
-### ✅ Empirical Results (Analysis Complete)
-
-**Status**: Analysis completed November 2024. Full results in [`RESULTS.md`](RESULTS.md).
-
-### 1. **Timing is the Primary Bottleneck for DCD**
-
-- **5.3x Difference**: DCD donors with longer windows (>48hr) are 5.3x more likely to be approached than those with short windows (<12hr).
-- **3.4x Longer Windows**: Approached DCD cases have 3.4x longer windows than not-approached cases (57.7hr vs 16.8hr).
-- **Structural Asymmetry**: DBD allows reactive approach (71.5% approached after brain death), while DCD requires proactive coordination.
-- **50% of DCD Have Short Windows**: Half of all DCD referrals have windows too short (<24 hours) for successful coordination.
-
-**Conclusion**: The DCD-DBD approach rate gap (10% vs 94%) is primarily explained by structural timing differences, not organizational behavior. This is a systems design problem, not an organizational performance problem.
-
-**Connection to ODE Model**: This finding validates the coordination failure hypothesis. The ODE model predicts that OPOs rationally under-invest in the costly process of "engagement and monitoring" when they cannot reliably coordinate with transplant centers. For DCD, this coordination must happen within a narrow time window. When that window is short (<24 hours), the multi-stakeholder coordination (hospital notification → OPO response → transplant center interest → family approach) cannot succeed. The result is exactly what the ODE model predicts: viable donors are lost through **passive attrition** when coordination infrastructure is insufficient for the temporal demands of the process.
-
-For a complete summary, see [TIME_WINDOW_ANALYSIS.md](docs/TIME_WINDOW_ANALYSIS.md).
-
-### 2. **Cause of Death >> Age**
-
-- **3.6x More Important**: Cause of death is 3.6x more important than age in predicting sorting success.
-- **Mechanism-Based Screening**: OPOs use mechanism-based screening (trauma vs. stroke), not just demographics.
-
-### 3. **DCD Pathway Discrimination**
-
-- **85-90% Under-utilization**: Even young DCD donors (age 22) are only approached 16% of the time.
-
-### 4. **Downstream Failures**
-
-- **13% of Authorizations Fail**: 2,402 families authorized donation but organs were not procured.
-
-For a complete summary of ML findings, see [ML_FINDINGS.md](docs/ML_FINDINGS.md).
-
----
-
-### 3. **The Opportunity: The "Free Lunch"** (No Quality Trade-off)
-
-We tested whether increasing sorting efficiency leads to lower organ quality.
-
-**Result**: **Flat/positive correlation** between sorting efficiency and placement rate.
-
-**Interpretation**: This is a **"Free Lunch"** scenario. OPOs can double their sorting volume without sacrificing organ quality. The marginal donors currently being ignored are **biologically equivalent** to those being utilized. The system is operating **far inside its efficiency frontier**.
-
-**Policy Implication**: There is substantial room for improvement without any biological or quality trade-offs. The constraint is operational capacity, not biological scarcity.
-
----
-
-### 4. **High OPO Variance** (2x Performance Gap)
-
-- **Best OPO**: 9.6% overall conversion rate
-- **Worst OPO**: 4.7% overall conversion rate
-- **Performance Gap**: 2.0x
-
-**Interpretation**: High variance is consistent with coordination failure. Different OPOs have settled into different local equilibria with their respective transplant centers and hospitals.
-
----
-
-### 5. **Robustness Across MSC Definitions**
-
-```
-Approach              MSCs      Sort Loss %
---------------------  --------  -----------
-Absolute Max          ~45,000   82%
-99th Percentile       ~38,000   78.4% (primary)
-Best OPO              ~33,000   76%
+python scripts/generate_figures.py
 ```
 
-Results are robust across all three approaches, confirming that sorting loss dominates regardless of how liberally or conservatively we define "medically suitable."
-
----
-
-## Limitations and Future Work
-
-### Scope of Empirical Validation
-
-This analysis provides **partial validation** of the ODE model's predictions:
-
-**What ORCHID Data Can Tell Us**:
-- ✅ **Magnitude** of sorting loss (how many donors are lost before approach)
-- ✅ **Variance** in OPO performance (evidence of different equilibria)
-- ✅ **Characteristics** of lost donors (age, cause of death patterns)
-- ✅ **Relative importance** of sorting vs. authorization vs. placement losses
-
-**What ORCHID Data Cannot Tell Us**:
-- ❌ **Which coordination failure** caused each loss (hospital? OPO? transplant center?)
-- ❌ **Why** specific referrals were not approached (capacity? information? expectations?)
-- ❌ **Transplant center behavior** (acceptance criteria, real-time demand)
-- ❌ **Hospital behavior** (referral practices, identification quality)
-- ❌ **Communication patterns** between stakeholders
-
-### The Missing Mechanisms
-
-The full ODE model is a **multi-player game** with strategic complementarity. ORCHID only captures **OPO-level outcomes**, not the underlying game dynamics. We can measure that donors fall through the cracks, but not precisely why:
-
-- Did the **hospital** fail to identify the referral as viable?
-- Did the **OPO** lack capacity to monitor this case?
-- Did the **transplant center** signal unwillingness to accept marginal organs?
-- Did **infrastructure gaps** (IT systems, communication protocols) prevent coordination?
-- Did **education deficits** lead to misclassification of viability?
-
-### Future Research Directions
-
-To fully validate the game-theoretic framework, we need:
-
-1. **Multi-stakeholder data**: Link OPO data with hospital referral practices and transplant center acceptance decisions
-2. **Process data**: Track communication, monitoring intensity, and resource allocation across the cultivation period
-3. **Experimental interventions**: Test coordination mechanisms (e.g., real-time demand signaling platforms)
-4. **Structural estimation**: Estimate players' belief functions and reaction functions to identify equilibrium selection
-5. **Counterfactual policy analysis**: Simulate impact of coordination infrastructure improvements
-
-### What This Analysis Achieves
-
-Despite these limitations, this analysis provides crucial evidence:
-
-1. **Establishes the magnitude** of the problem (sorting loss is dominant)
-2. **Refutes the authorization bottleneck narrative** (family refusal is not the primary constraint)
-3. **Documents systematic patterns** consistent with coordination failure (OPO variance, age bias)
-4. **Provides a baseline** for measuring impact of future interventions
-
-The finding that 75-85% of losses occur at sorting is **necessary but not sufficient** to prove the full ODE model. It is, however, **inconsistent** with the conventional authorization-bottleneck view and **consistent** with the coordination failure hypothesis.
-
----
-
-## Results and Visualizations
-
-See [`RESULTS.md`](RESULTS.md) for complete analysis and interpretation.
-
-**Key Figures**:
-- Loss Waterfall Decomposition
-- Weekend Effect (Congestion Analysis)
-- Risk-Reward Tradeoff (Free Lunch)
-- OPO Performance Comparison
-- Efficiency Frontier
+Output will be saved to `results/figures/`.
 
 ---
 
 ## Citation
 
-If you use this code or methodology in your research, please cite:
+If you use this code or findings in your research, please cite:
 
+**Paper:**
 ```bibtex
-@misc{organ-donation-ode-2024,
-  title = {Empirical Validation of the Organ Donation Equilibrium Model},
-  year = {2024},
-  publisher = {GitHub},
-  journal = {GitHub repository},
-  howpublished = {\url{https://github.com/2460bazinga/organ-donation-ode}}
-}
-```
-
-**ORCHID Dataset**:
-```bibtex
-@article{adam2025orchid,
-  title={Organ Retrieval and Collection of Health Information for Donation (ORCHID)},
-  author={Adam, Hammaad and Suriyakumar, Vinith and Pollard, Tom and Moody, Benjamin and Erickson, Jennifer and Segal, Greg and Adams, Brad and Brockmeier, Diane and Lee, Kevin and McBride, Ginny and Ranum, Kelly and Wadsworth, Matthew and Whaley, Janice and Wilson, Ashia and Ghassemi, Marzyeh},
-  journal={PhysioNet},
+@article{parrish2025ode,
+  title={Organ Donation Equilibrium: An Empirical Analysis of Coordination Failure in the U.S. Organ Donation System},
+  author={Parrish, Noah},
+  journal={[Journal Name]},
   year={2025},
-  doi={10.13026/rfeq-j318}
+  note={In preparation}
 }
 ```
+
+**Dataset:**
+```bibtex
+@misc{adam2023orchid,
+  title={Organ Retrieval and Collection of Health Information for Donation (ORCHID)},
+  author={Adam, Hana and Suriyakumar, Vinith and Pollard, Tom and Moody, Benjamin and Erickson, Jared and Segal, Gabriel and Wiens, Jenna and Ghassemi, Marzyeh},
+  year={2023},
+  publisher={PhysioNet},
+  doi={10.13026/eytj-4f29}
+}
+```
+
+---
+
+## Acknowledgments
+
+The author acknowledges the use of large language models (Manus 1.5, Gemini 2.5 Flash, and Claude Opus 4.5) for assistance with literature review, data analysis, and computational implementation. All AI-generated content was reviewed, verified, and edited by the author. The author takes full responsibility for the accuracy and integrity of the work.
+
+Special thanks to the ORCHID team at MIT and the Federation of American Scientists for making this dataset publicly available.
 
 ---
 
@@ -531,65 +399,16 @@ If you use this code or methodology in your research, please cite:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-**Note**: The ORCHID dataset is subject to the PhysioNet Restricted Health Data License 1.5.0 and must be obtained separately.
-
 ---
 
 ## Contact
 
-**Author**: Noah  
-**Email**: noah@2460.life 
-**GitHub**: [@2460bazinga](https://github.com/2460bazinga)
+**Noah Parrish**  
+Email: [Your email]  
+GitHub: [@2460bazinga](https://github.com/2460bazinga)
 
-For questions about the ODE model or this analysis, please open an issue or contact the author directly.
-
----
-
-## Acknowledgments
-
-- **ORCHID Dataset**: Adam et al., PhysioNet
-- **Organ Procurement Organizations**: The six anonymous OPOs who contributed data
-- **PhysioNet**: For providing secure data sharing infrastructure
+For questions about the ORCHID dataset, please contact the dataset authors through PhysioNet.
 
 ---
 
-## Project Status
-
-🚧 **Status**: Active Research (Phase 2 Complete)
-
-**Completed**:
-- ✅ Data validation and exploration
-- ✅ MSC identification methodology
-- ✅ Sensitivity analysis framework
-- ✅ Theoretical paper draft
-
-**In Progress**:
-- 🔄 Running sensitivity analysis
-- 🔄 Robustness analysis implementation
-
-**Planned**:
-- ⏳ Shapley decomposition
-- ⏳ Visualization generation
-- ⏳ Final report and publication
-
----
-
-## Contributing
-
-This is an active research project. Contributions, suggestions, and feedback are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/YourFeature`)
-3. Commit your changes (`git commit -m 'Add YourFeature'`)
-4. Push to the branch (`git push origin feature/YourFeature`)
-5. Open a Pull Request
-
----
-
-## Disclaimer
-
-This research is for academic purposes only. Findings should not be used to make clinical decisions without proper validation and peer review. The views expressed are those of the author and do not represent the positions of any Organ Procurement Organization or transplant center.
-
----
-
-**Last Updated**: November 24, 2024
+**Last Updated:** November 25, 2025
