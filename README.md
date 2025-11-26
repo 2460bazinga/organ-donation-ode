@@ -54,8 +54,8 @@ This paper demonstrates that all three narratives are largely incorrect.
 
 The organ donation system is a twelve-player dynamic game involving hospitals, organ procurement organizations (OPOs), transplant centers, and families. Each player operates under uncertainty, time constraints, and incomplete information about others' actions. The result is a **low-level equilibrium** where:
 
-- Hospitals under-refer marginal cases
-- OPOs under-monitor marginal referrals
+- Hospitals under-refer cases
+- OPOs under-monitor referrals
 - Transplant centers under-prepare for marginal organs
 - Families are never asked (because donors exit the system upstream)
 
@@ -368,7 +368,7 @@ If you use this code or findings in your research, please cite:
 @article{parrish2025ode,
   title={Organ Donation Equilibrium: An Empirical Analysis of Coordination Failure in the U.S. Organ Donation System},
   author={Parrish, Noah},
-  journal={[Journal Name]},
+  journal={UNPUBLISHED},
   year={2025},
   note={In preparation}
 }
@@ -404,7 +404,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contact
 
 **Noah Parrish**  
-Email: [Your email]  
+Email: noah@2460.life
 GitHub: [@2460bazinga](https://github.com/2460bazinga)
 
 For questions about the ORCHID dataset, please contact the dataset authors through PhysioNet.
